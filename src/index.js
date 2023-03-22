@@ -13,17 +13,16 @@ class ImageFigure extends HTMLElement {
     const releasedate = this.getAttribute('release-date');
 
     this.innerHTML = `
-      <div class="  ">
-      <div class='flex justify-center items-center  flex-col '>
+    
+      <div class='flex justify-center items-center  flex-col cursor-pointer '>
           <img class="rounded-lg shadow-lg bg-contain max-[600px]:h-36 h-80 w-60 " src="${imageUrl}" alt="${imageAlt}">
       </div>
      
-        <div class=' h-16 text-white'>
-        <div class='m-2 ml-0 font-semibold truncate'>${title}</div>
-        <div class=''>${releasedate.substring(0, 4)}</div>
+        <div class=' h-16 '>
+        <div class='m-2 ml-0 font-semibold truncate hover:text-[#E50914] cursor-pointer text-white'>${title}</div>
+        <div class='text-[#7c7979] font-semibold'>${releasedate.substring(0, 4)}</div>
     </div>
-      
-      </div>
+    
     `;
   }
 }
@@ -31,9 +30,15 @@ class ImageFigure extends HTMLElement {
 customElements.define('image-figure', ImageFigure);
 
 async function getTrendingMovies() {
-  const { data: { results } } = await axios.get('https://api.themoviedb.org/3/trending/all/week?api_key=5d80e7b9d2bf9ada1894ca7c1f6d4c57');
-  console.log(results)
-  return results;
+  try {
+    const { data: { results } } = await axios.get('https://api.themoviedb.org/3/trending/all/week?api_key=5d80e7b9d2bf9ada1894ca7c1f6d4c57');
+    console.log(results);
+    return results;
+  } catch (error) {
+    console.error(error);
+    alert('Failed to load trending movies. Please try again later.');
+    return [];
+  }
 }
 
 async function searchMovies(query) {
@@ -86,109 +91,12 @@ form.addEventListener('submit', async (event) => {
     renderResults(results);
   });
 
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const top = document.getElementById('top');
 
-
-
-
-
-
-
-
-
-
-
-
-// import './style.css';
-// import axios from 'axios';
-
-// class ImageFigure extends HTMLElement {
-//   constructor() {
-//     super();
-//   }
-
-//   connectedCallback() {
-//     const imageUrl = this.getAttribute('image-url');
-//     const imageAlt = this.getAttribute('image-alt');
-//     const caption = this.getAttribute('caption');
-//     const releasedate = this.getAttribute('release-date');
-
-//     this.innerHTML = `
-//       <div class="  ">
-//       <div class='flex justify-center items-center  flex-col '>
-//           <img class="rounded-lg shadow-lg bg-contain h-80 w-60" src="${imageUrl}" alt="${imageAlt}">
-//       </div>
-     
-       
-//         <div class=' h-16 text-white'>
-//         <div class='m-2 ml-0 font-semibold truncate'>${caption}</div>
-//         <div class=''>${releasedate}</div>
-//     </div>
-      
-//       </div>
-//     `;
-//   }
-// }
-
-// customElements.define('image-figure', ImageFigure);
-
-// axios.get('https://api.themoviedb.org/3/trending/all/day?api_key=5d80e7b9d2bf9ada1894ca7c1f6d4c57')
-//   .then(({ data: { results } }) => {
-//     for (const result of results) {
-//         // console.log(result);
-//       const { poster_path, title , release_date} = result;
-//       const imageUrl = `https://image.tmdb.org/t/p/w500/${poster_path}`;
-//       const imageAlt = title;
-//       const releasedate = release_date;
-
-//       const imageFigureElement = new ImageFigure();
-//       imageFigureElement.setAttribute('image-url', imageUrl);
-//       imageFigureElement.setAttribute('image-alt', imageAlt);
-//       imageFigureElement.setAttribute('caption', title);
-//       imageFigureElement.setAttribute('release-date', releasedate);
-
-//       const wrapper = document.getElementById('wrapper')
-//       wrapper.appendChild(imageFigureElement);
-//     }
-//   });
-
-  
-
-//   const form = document.querySelector('form');
-//   const input = form.querySelector('#default-search');
-  
-//   form.addEventListener('submit', (event) => {
-//     event.preventDefault(); // prevent the default form submission
-//     const value = input.value;
-//     console.log(value);
-   
-//     getmovies(value)
-
-//   });
-
-
-//   async function getmovies(value) {
-//      await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=5d80e7b9d2bf9ada1894ca7c1f6d4c57&query=${value}`)
-//     .then(({ data: { results } }) => {
-//         console.log(results);
-//         for (const result of results) {
-//             // console.log(result);
-//           const { poster_path, title , release_date} = result;
-//           const imageUrl = `https://image.tmdb.org/t/p/w500/${poster_path}`;
-//           const imageAlt = title;
-//           const releasedate = release_date;
-    
-//           const imageFigureElement = new ImageFigure();
-//           imageFigureElement.setAttribute('image-url', imageUrl);
-//           imageFigureElement.setAttribute('image-alt', imageAlt);
-//           imageFigureElement.setAttribute('caption', title);
-//           imageFigureElement.setAttribute('release-date', releasedate);
-    
-//           const wrapper = document.getElementById('wrapper')
-//           wrapper.appendChild(imageFigureElement);
-//         }
-
-//     })
-//   }
-
-
+  top.addEventListener('click', function (){
+    scrollToTop()
+  });
 
